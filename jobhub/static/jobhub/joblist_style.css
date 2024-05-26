@@ -1,0 +1,201 @@
+
+/* Card styles */
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1em;
+    margin: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/* Filter Bar & Items */
+.filter-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it appears above other elements */
+    background-color: #fff; /* This can be changed as per your design */
+    padding: 1em;
+    height: 2em;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+}
+    
+    .search-box input {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    
+    .search-box button {
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 8px;
+        cursor: pointer;
+    }
+  
+    .dropdown {
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .toggle-button {
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .toggle-button-active {
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: rgb(28, 153, 255);
+        color: white;
+        font-weight: bold;
+    }
+
+    .all-filters {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+
+
+.tools-bar {
+    position: fixed;
+    bottom: 0;
+    right:  0;
+    
+    width: 50%;
+    z-index: 0; 
+    background-color: #ffffff00; /* This can be changed as per your design */
+    padding: 1em;
+    height: 2em;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1em;
+    
+}
+#apply-button{
+    font-weight: bold;
+}
+
+/* .tool-button{
+    
+} */
+
+/*
+ * -- TABLET (AND UP) MEDIA QUERIES --
+ * On tablets and other medium-sized devices, we want to customize some
+ * of the mobile styles.
+ */
+ @media (min-width: 40em) {
+    .filter-bar{
+        margin-left: 150px;
+    }
+
+ }
+
+ /*
+ * -- DESKTOP (AND UP) MEDIA QUERIES --
+ * On desktops and other large-sized devices, we want to customize some
+ * of the mobile styles.
+ */
+@media (min-width: 60em) {
+
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7); /* Black with opacity */
+    z-index: 1001; /* Stay on top */
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f4f4f4;
+    padding: 20px;
+    width: 30%;
+    border-radius: 5px;
+}
+
+/* form card */
+.form-card {
+    padding: 20px;
+    border: 1px solid #e1e1e1;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+
+.form-card label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.form-card select, .form-card input, .form-card textarea {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+}
+
+.form-card button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #0078e7;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.form-card button:last-child {
+    background-color: #e1e1e1;
+    color: #333;
+}
+
+.jobhub-avatar {
+    border-radius: 3px;
+    margin-bottom: 1em;
+}
+
+.logout-btn {
+    width: 90px;
+    background-color: #2196F3;
+    text-align: center;
+    margin: 20px 10px;
+    border-radius: 5px;
+}
+
+.logout-btn:hover {
+    background-color: #187bcd;
+}

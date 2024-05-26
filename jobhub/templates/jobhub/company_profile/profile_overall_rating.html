@@ -1,0 +1,133 @@
+{% extends "jobhub/base_company_profile.html" %}
+{% block content %}
+<div class="card">
+    <h3>Overall Rating</h3>
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-1-2">
+            <div class="five-stars" id="overall_rating_stars_div">
+                <span class="big-overall-score" id="overall_rating">{{ profile.company_review.overall_rating }}</span>
+
+                <svg width="32" height="32" viewBox="2 2 20 20" fill="none" class = "star-svg"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                        {% if profile.company_review.overall_rating >= 1 %} fill="#FFD700" {% else %} fill="#C4C4C4" {% endif %} />
+                </svg>
+                <svg width="32" height="32" viewBox="2 2 20 20" fill="none" class = "star-svg"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                        {% if profile.company_review.overall_rating >= 2 %} fill="#FFD700" {% else %} fill="#C4C4C4" {% endif %} />
+                </svg>
+                <svg width="32" height="32" viewBox="2 2 20 20" fill="none" class = "star-svg"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                        {% if profile.company_review.overall_rating >= 3 %} fill="#FFD700" {% else %} fill="#C4C4C4" {% endif %} />
+                </svg>
+                <svg width="32" height="32" viewBox="2 2 20 20" fill="none" class = "star-svg"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                        {% if profile.company_review.overall_rating >= 4 %} fill="#FFD700" {% else %} fill="#C4C4C4" {% endif %} />
+                </svg>
+                <svg width="32" height="32" viewBox="2 2 20 20" fill="none" class = "star-svg"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                        {% if profile.company_review.overall_rating >= 5 %} fill="#FFD700" {% else %} fill="#C4C4C4" {% endif %} />
+                </svg>
+            </div>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2">
+            <div style="margin: 0 auto; width: 80%; margin-top: 10px;">
+                <span class="small-category-title"> Ratings by Category</span>
+            </div>
+        </div>
+    </div>
+    <div class="pure-g">
+        <!-- Overall Star Ranks -->
+        <div class="pure-u-1 pure-u-md-1-2">
+            <!-- Here you can insert a star UI component to display overall star rating -->
+            <div class="stars-rating">
+                <div class="rating-line">
+                    <span class="rating-number">5</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                            fill="#FFD700" />
+                    </svg>
+                    <div class="progress-container">
+                        <div class="progress-bar" id = "five_star_progress" style="width: {{ profile.company_review.five_star_rating }}%;"> </div>
+                    </div>
+                </div>
+
+                <div class="rating-line">
+                    <span class="rating-number">4</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                            fill="#FFD700" />
+                    </svg>
+                    <div class="progress-container">
+                        <div class="progress-bar" id = "four_star_progress" style="width: {{ profile.company_review.four_star_rating }}%;"> </div>
+                    </div>
+                </div>
+
+                <div class="rating-line">
+                    <span class="rating-number">3</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                            fill="#FFD700" />
+                    </svg>
+                    <div class="progress-container">
+                        <div class="progress-bar" id = "three_star_progress" style="width: {{ profile.company_review.three_star_rating }}%;"> </div>
+                    </div>
+                </div>
+
+                <div class="rating-line">
+                    <span class="rating-number">2</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                            fill="#FFD700" />
+                    </svg>
+                    <div class="progress-container">
+                        <div class="progress-bar" id = "two_star_progress" style="width: {{ profile.company_review.two_star_rating }}%;"> </div>
+                    </div>
+                </div>
+
+                <div class="rating-line">
+                    <span class="rating-number">1</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 2L14.09 8.26L20.18 9.27L15.58 13.77L16.89 19.64L12 17.08L7.11 19.64L8.42 13.77L3.82 9.27L9.91 8.26L12 2Z"
+                            fill="#FFD700" />
+                    </svg>
+                    <div class="progress-container">
+                        <div class="progress-bar" id = "one_star_progress" style="width: {{ profile.company_review.one_star_rating }}%;"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ratings by Category -->
+        <div class="pure-u-1 pure-u-md-1-2">
+            <div style="margin: 0 auto; width: 80%;">
+                <p><span id="interview_progression_rating">{{ profile.company_review.interview_progression_rating }}</span> Interview Progression</p>
+                <p><span id="application_response_time_rating">{{ profile.company_review.application_response_time_rating }}</span> Application Response Time</p>
+                <p><span id="benefits_during_interview_rating">{{ profile.company_review.benefits_during_interview_rating }}</span> Benefits During Interview</p>
+                <p><span id="interview_atmosphere_rating">{{ profile.company_review.interview_atmosphere_rating }}</span> Interview Atmosphere</p>
+                <p><span id="interview_etiquette_rating">{{ profile.company_review.interview_etiquette_rating }}</span> Interviewer Etiquette</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

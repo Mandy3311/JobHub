@@ -1,0 +1,91 @@
+{% extends "jobhub/base_user_profile.html" %}
+{% block content %}
+<div class="card" id="basic-personl-info" {% if form_type != 'personal_info' %} style="display: block;" {% else %}
+    style="display: none;" {% endif %}>
+    <h3>Basic Personal Info <i class="edit-icon" id="basic-personl-info-edit" onclick="editBasicPersonalInfo()"
+        {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+        >✎</i>
+    </h3>
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-2-5">
+            <div class="avatar">
+                <!-- <img src="/media/profile_pictures/aolei.jpg"
+                    alt="User Avatar"> -->
+                {% if picture %}
+                    <img src="{{ picture }}" alt="Profile Image" id="id_user_picture">
+                {% else %}
+                  {% load static %}
+                  <img src="{% static 'jobhub/default_user.png' %}" alt="Profile Image" id="id_user_picture">
+                {% endif %}
+            </div>
+        </div>
+        <div class="pure-u-1 pure-u-md-3-5">
+            <p>
+                <span id="name-text" style="font-weight: bold; font-size: 1.2em;">
+                    {{ profile.personal_info.name}}
+                </span><br>
+                <!-- <span>Software Developer at Snowflake</span> -->
+                <span> {{ profile.personal_info.position }} </span><br>
+                {% if profile.personal_info.company_name %}
+                    <span> at     
+                    {% if profile.personal_info.company_id %}
+                        <a href="/other_company_profile?company_id={{ profile.personal_info.company_id }}">
+                            {{ profile.personal_info.company_name }}
+                        </a>
+                    {% else %}
+                        {{ profile.personal_info.company_name }} 
+                    {% endif %}
+                    </span><br>
+                        <!-- else if profile.personal_info.school  -->
+                {% elif profile.personal_info.school %}
+                <span> at {{ profile.personal_info.school }} </span><br>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    <span>
+        <!-- Hi, I'm Aolei, currently pursuing my Master's degree in Computational Data Science with
+                                a focus on Computer Systems at CMU. I'll be graduating in December 2023. -->
+        {{ profile.personal_info.bio }}
+    </span>
+</div>
+<form action=" {% url 'base_user_profile' %} " method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="card form-card" id="basic-personl-info-form" {% if form_type != 'personal_info' %} style="display: none;"
+        {% else %} style="display: block;" {% endif %}>
+        <h3>Edit Personal Info</h3>
+
+        <label for="editName">Name:</label>
+        <input type="text" name="editName" required value="{{ profile.personal_info.name }}">
+        <span class="errorlist"> {{ form.editName.errors }} </span>
+
+        <label for="editPosition">Position:</label>
+        <input type="text" name="editPosition" required value="{{ profile.personal_info.position }}">
+        <span class="errorlist"> {{ form.editPosition.errors }} </span>
+
+        <label for="editCompany">Company:</label>
+        <input type="text" name="editCompany" value="{{ profile.personal_info.company_name }}"> 
+        <span class="errorlist"> {{ form.editCompany.errors }} </span>
+
+        <label for="editCompanyId">Company Username (if any):</label>
+        <input type="text" name="editCompanyId" value="">
+        <span class="errorlist"> {{ form.editCompanyId.errors }} </span>
+
+        <label for="editSchool">School:</label>
+        <input type="text" name="editSchool">
+        <span class="errorlist"> {{ form.editSchool.errors }} </span>
+
+        <label for="editBio">Bio:</label>
+        <textarea name="editBio"
+            required>{{ profile.personal_info.bio }}</textarea>
+        <span class="errorlist"> {{ form.editBio.errors }} </span>
+
+        <label for="editPicture"> Profile Picture: </label>
+        <input type="file" name="editPicture"> 
+
+        <button type="submit" name="personal_info_submit">Submit</button>
+        <button type="button" id="basic-personl-info-cancel" onclick="cancelEditBasicPersonalInfo()">Cancel</button>
+
+    </div>
+</form>
+{% endblock %}

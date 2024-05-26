@@ -1,0 +1,168 @@
+{% extends "jobhub/application/applicant_base.html" %}
+
+{% block title %} Application Management {% endblock %} 
+
+{% block menu %}
+    <img width="100" height="100" alt="Tilo Mitra&#x27;s avatar" class="jobhub-avatar" src="/static/jobhub/jobhub.jpg">
+    <p style="color: #777;"> {{ request.user.last_name }} account</p>
+    <div class="pure-menu">
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a href="{% url 'base_company_profile' %}" class="pure-menu-link">My Profile</a></li>
+            <li class="pure-menu-item"><a href="{% url 'joblist' %}" class="pure-menu-link">Jobs</a></li>
+            <li class="pure-menu-item"><a href="{% url 'applicant_application' 'all' %}" class="pure-menu-link">Applications</a></li>
+        </ul>
+    </div>
+    <a href="{% url 'logout' %}" class="pure-menu-link logout-btn">Logout</a>
+{% endblock %}
+
+{% block main-header %}
+    <div class="navbar-container">
+        <div class="navbar">
+            {% url 'applicant_application' 'all' as all_url %}
+            {% url 'applicant_application' 'reviewed' as reviewed_url %}
+            {% url 'applicant_application' 'interviewed' as interviewed_url %}
+            {% url 'applicant_application' 'hired' as hired_url %}
+            {% url 'applicant_application' 'rejected' as rejected_url %}
+            <a href="{{ all_url }}" class="nav-item l {% if request.path == all_url %}active{% endif %}"><span>All</span></a>
+            <a href="{{ reviewed_url }}" class="nav-item l {% if request.path == reviewed_url %}active{% endif %}"><span>Reviewed</span></a>
+            <a href="{{ interviewed_url }}" class="nav-item l {% if request.path == interviewed_url %}active{% endif %}"><span>Interviewed</span></a>
+            <a href="{{ hired_url }}" class="nav-item l {% if request.path == hired_url %}active{% endif %}"><span>Hired</span></a>
+            <a href="{{ rejected_url }}" class="nav-item l {% if request.path == rejected_url %}active{% endif %}"><span>Rejected</span></a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main-content %}
+    <div class="left-column pure-u-1-2">
+        <div id="all-applications"></div>
+    </div>
+    <div class="right-column pure-u-1-2">
+        <div id="tracking-board"></div>
+        <div class="card-container review-card">
+            <div class="card">
+                <div class="card-header">Add Your Review</div>
+                <form method="post">
+                    {% if message %}
+                        <p class="errorlist">{{message}}</p>
+                    {% endif %}
+                    <label for="company">Company:</label>
+                    <div class="rating-row">
+                        <input type="text" name='company' id="company" placeholder="Tech Innovations">
+                    </div>
+                    <span class="errorlist"> {{ form.company.errors }} </span>
+                    <label for="role">Role:</label>
+                    <div class="rating-row">
+                        <select class="jobname-options" name='role'>
+                            <option selected value="IT Intern">IT Intern</option>
+                            <option value="Software Engineer">Software Engineer</option>
+                            <option value="Product Manager">Product Manager</option>
+                            <option value="Product Designer">Machine Learning Engineer</option>
+                            <option value="Data Scientist">Data Scientist</option>
+                            <option value="Data Analyst">Data Analyst</option>
+                            <option value="UX Designer">UI/UX Designer</option>
+                            <option value="Business Analyst">Business Analyst</option>
+                            <option value="Marketing">Marketing & Finance</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating">
+                            <label>Overall Rating:</label>
+                            <select class="rating-select" name='overall_rating'>
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                        <div class="rating" class="'rating">
+                            <label>Interview Progression:</label>
+                            <select name='interview_progression'>
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating">
+                            <label>App Response Time:</label>
+                            <select name='response_time'>
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                        <div class="rating">
+                            <label>Benefits in Interview:</label>
+                            <select name='benefits_in_interview'>
+                                <option value="1">1 Stars</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <div class="rating">
+                            <label>Interview Atmosphere:</label>
+                            <select name='interview_atmosphere'>
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+
+                        <div class="rating">
+                            <label>Interviewer Etiquette:</label>
+                            <select name='interviewer_etiquette'>
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <label for="title">Title:</label>
+                    </div>
+                    <div class="rating-row">
+                        <input type="text" id="title" name='title'>
+                    </div>
+                    <span class="errorlist"> {{ form.title.errors }} </span>
+                    <div class="rating-row">
+                        <label for="content">Content:</label>
+                    </div>
+                    <div class="rating-row">
+                        <textarea id="content" rows="4" name='content'></textarea>
+                    </div>
+                    <span class="errorlist"> {{ form.content.errors }} </span> 
+                    <div class="buttons">
+                        <button class="submit-btn" type="submit">Submit</button>
+                        <button class="cancel-btn" type="button">Cancel</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            setupCancelConfirmation(".cancel-btn", "confirmModal", "Are you sure you want to cancel and clear all inputs?");
+            const currentStatus = window.location.pathname.split('/')[2];
+            getList(currentStatus);
+            setInterval(function() {
+                getList(currentStatus);
+            }, 5000);
+        };
+    </script>
+{% endblock %}

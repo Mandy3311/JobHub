@@ -1,0 +1,113 @@
+{% extends "jobhub/application/employer_base.html" %}
+
+{% block title %} Application Management {% endblock %} 
+
+{% block menu %}
+    <img width="100" height="100" alt="Tilo Mitra&#x27;s avatar" class="jobhub-avatar" src="/static/jobhub/jobhub.jpg">
+    <p style="color: #777;"> {{ request.user.last_name }} account</p>
+    <div class="pure-menu">
+        <ul class="pure-menu-list">
+            <li>
+                {% if request.user.last_name == 'employer' %}
+                    <a href="{% url 'base_company_profile' %}" class="pure-menu-link">My Profile</a>
+                {% else %}
+                    <a href="{% url 'base_user_profile' %}" class="pure-menu-link">My Profile</a>
+                {% endif %}
+            </li>
+            <li><a href="{% url 'joblist' %}" class="pure-menu-link">Jobs</a></li>
+            <li><a href="{% url 'employer_application' 0 'all' %}" class="pure-menu-link">Applications</a></li>
+        </ul>
+    </div>
+    <a href="{% url 'logout' %}" class="pure-menu-link logout-btn">Logout</a>
+{% endblock %}
+
+{% block application %}
+    <div id="all-jobs"></div>
+{% endblock %}
+
+{% block main-header %}
+    <div class="navbar-container">
+        <div class="navbar">
+            <a href="{% url 'employer_application' id 'all' %}" class="nav-item l {% if status == 'all' %}active{% endif %}"><span>All</span></a>
+            <a href="{% url 'employer_application' id 'reviewed' %}" class="nav-item l {% if status == 'reviewed' %}active{% endif %}"><span>Reviewed</span></a>
+            <a href="{% url 'employer_application' id 'interviewed' %}" class="nav-item l {% if status == 'interviewed' %}active{% endif %}"><span>Interviewed</span></a>
+            <a href="{% url 'employer_application' id 'hired' %}" class="nav-item l {% if status == 'hired' %}active{% endif %}"><span>Hired</span></a>
+            <a href="{% url 'employer_application' id 'rejected' %}" class="nav-item l {% if status == 'rejected' %}active{% endif %}"><span>Rejected</span></a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main-content %}
+    <div class="left-column pure-u-1-2">
+        <div id="all-applicants"></div>
+    </div>
+
+    <div class="right-column pure-u-1-2">
+        <div id="tracking-board"></div>
+
+        <div class="card-container review-card">
+            <div class="card">
+                <div class="card-header">Post New Jobs</div>
+                <form method="post">
+                    {% if message %}
+                        <p class="errorlist">{{message}}</p>
+                    {% endif %}
+                    <label for="role">Job Name:</label>
+                    <input type="text" name='job_name' id="role" placeholder="Software Development Engineer">
+                    <span class="errorlist"> {{ form.job_name.errors }} </span>
+                    
+                    <label for="date">Due Date:</label>
+                    <input type="date" name='job_due_time' id="date" placeholder="YYYY-MM-DD">
+                    <span class="errorlist"> {{ form.job_due_time.errors }} </span>
+
+                    <label for="location">Location:</label>
+                    <input type="text" name="location" id="location" placeholder="Location">
+                    <span class="errorlist"> {{ form.location.errors }} </span>
+
+                    <label for="estimate_pay_lower">Estimated minimum pay:</label>
+                    <input type="number" name="estimate_pay_lower" id="estimate_pay_lower" placeholder="Positive number">
+                    <span class="errorlist"> {{ form.estimate_pay_lower.errors }} </span>
+
+                    <label for="estimate_pay_upper">Estimated maximum pay:</label>
+                    <input type="number" name="estimate_pay_upper" id="estimate_pay_upper" placeholder="Positive number">
+                    <span class="errorlist"> {{ form.estimate_pay_upper.errors }} </span>
+
+                    <label for="job_type">Job Type:</label>
+                    <input type="text" name="job_type" id="job_type" placeholder="Full-time">
+                    <span class="errorlist"> {{ form.job_type.errors }} </span>
+                    
+                    <label for="job_responsibilities">Job Responsibilities:</label>
+                    <textarea id="job_responsibilities" rows="2" name="job_responsibilities" placeholder="Job Responsibilities"></textarea>
+                    <span class="errorlist"> {{ form.job_responsibilities.errors }} </span>
+
+                    <label for="job_description">Job Description:</label>
+                    <textarea id="job_description" rows="3" name="job_description" placeholder="Job Description"></textarea>
+                    <span class="errorlist"> {{ form.job_description.errors }} </span>
+                    
+                    <div class="buttons">
+                        <button class="submit-btn" type="submit">Submit</button>
+                        <button class="cancel-btn" type="button">Cancel</button>
+                    </div>
+                    {%csrf_token%}
+                </form>
+
+                {% for error in form.non_field_errors %}
+                    <p class="errorlist">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script>
+        const id = window.location.pathname.split('/')[2];
+        const status = window.location.pathname.split('/')[3];
+        window.onload = function() {
+            setupCancelConfirmation(".cancel-btn", "confirmModal", "Are you sure you want to cancel and clear all inputs?");
+            getList(id, status);
+        };
+        setInterval(function() {
+            getList(id, status);
+        }, 5000);
+    </script>
+{% endblock %} 

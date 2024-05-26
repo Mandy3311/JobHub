@@ -1,0 +1,55 @@
+{% extends "jobhub/base_user_profile.html" %}
+{% block content %}
+<div class="card" id="contact-info" {% if form_type != 'contact_info' %} style="display: block;" {% else %}
+    style="display: none;" {% endif %}>
+    <h3>Contact Information <i class="edit-icon" id="contact-info-edit" onclick="editContactInfo()"
+        {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+        >✎</i></h3>
+    <p>Phone: {{ profile.contact_info.phone }}</p>
+    <p>Email: {{ profile.contact_info.email }}</p>
+    <p>Address: {{ profile.contact_info.address }}</p>
+    <p>LinkedIn: <a href='https://www.linkedin.com/{{ profile.contact_info.linkedin }}' target="_blank">{{ profile.personal_info.name }}</a></p>
+    <!-- <p>Resume: <a href="{{ profile.contact_info.resume }}"> {{ profile.personal_info.name }}'s Resume</a></p> -->
+    <p>Resume: 
+        {% if profile.contact_info.resume %}
+            <a href="{{ profile.contact_info.resume.url }}" target="_blank"> 
+                {{ profile.personal_info.name }}'s Resume
+            </a>
+        {% else %}
+            No resume uploaded.
+        {% endif %}
+    </p>
+</div>
+<!-- if formType == 'contact_info', block -->
+<form action=" {% url 'base_user_profile' %} " method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="card form-card" id="contact-info-form" {% if form_type != 'contact_info' %} style="display: none;" {%
+        else %} style="display: block;" {% endif %}>
+        <h3>Edit Contact Info</h3>
+
+        <label for="editPhone">Phone:</label>
+        <input type="text" name="editPhone" required value="{{ profile.contact_info.phone }}">
+        <span class="errorlist"> {{ form.editPhone.errors }} </span>
+
+        <label for="editEmail">Email:</label>
+        <input type="text" name="editEmail" required value="{{ profile.contact_info.email }}">
+        <span class="errorlist"> {{ form.editEmail.errors }} </span>
+
+        <label for="editAddress">Address:</label>
+        <input type="text" name="editAddress" required value="{{ profile.contact_info.address }}">
+        <span class="errorlist"> {{ form.editAddress.errors }} </span>
+
+        <label for="editLinkedIn">LinkedIn </label>
+        <span>https://www.linkedin.com/{in/xx}:</span>
+        <input type="text" name="editLinkedIn" required value="{{ profile.contact_info.linkedin }}" placeholder="in/username">
+        <span class="errorlist"> {{ form.editLinkedIn.errors }} </span>
+
+        <label for="editResume">Resume:</label>
+        <input type="file" name="editResume" accept=".pdf">
+        <span class="errorlist">{{ form.editResume.errors }}</span>
+
+        <button type="submit" name="contact_info_submit">Submit</button>
+        <button type="button" id="contact-info-cancel" onclick="cancelEditContactInfo()">Cancel</button>
+    </div>
+</form>
+{% endblock %}

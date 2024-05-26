@@ -1,0 +1,86 @@
+{% extends "jobhub/base_user_profile.html" %}
+{% block content %}
+<div id="profile_projects">
+    <h2 class="content-subhead-right">Project Experience</h2>
+        {% for project in projects %}
+        <div class="card" id="project-experience-{{ project.id }}">
+            <h3><span id="project-experience-{{ project.id }}-name">{{ project.project_name }} 
+                <i class="edit-icon" id="project-experience-edit-{{ project.id }}" 
+                onclick="editProjectExperience('{{ project.id }}')"
+                {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+                >✎</i>
+                <i class="delete-icon" id="project-experience-{{ project.id }}-deleteButton" title="Delete User ID"
+                    onclick="deleteCard('project-experience', '{{ project.id }}')"
+                >☓</i>
+            </h3>
+            <div class="pure-g">
+                <div class="pure-u-1 pure-u-md-1-2">
+                    Role: <span id="project-experience-{{ project.id }}-role">{{ project.role }}</span><br>
+                    Duration: <span id="project-experience-{{ project.id }}-start">{{ project.start_time }}</span> - 
+                    <span id="project-experience-{{ project.id }}-end">{{ project.end_time|default:"Present" }}</span>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-2">
+                    Location: <span id="project-experience-{{ project.id }}-location">{{ project.location }}</span>
+                </div>
+            </div>
+            <p id="project-experience-{{ project.id }}-description">{{ project.description }}</p>
+        </div>
+        {% endfor %}
+        {% if projects|length == 0 %}
+        <p class="content-p-right">No project experience yet</p>
+        {% endif %}
+    <div class="card add-card" id="project-experience-add" onclick="editProjectExperience(-1)"
+    {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+    >
+        <span>+ Add Your Project Experience</span>
+    </div>
+
+    <div class="card form-card" id="project-experience-form" style="display: none;">
+        <form action=" {% url 'base_user_profile' %} " method="post">
+            {% csrf_token %}
+        <h3>Edit Project Experience</h3>
+
+            <label for="addId" hidden>Id:</label>
+            <input type="text" name="addId" id="project_id" hidden value="-1">
+
+            <label for="addProject">Project:</label>
+            <input type="text" name="addProject" required id="project-addProject">
+            <span class="error">{{ form.addProject.errors }}</span>
+
+            <label for="addRole">Role:</label>
+            <input type="text" name="addRole" required id="project-addRole">
+            <span class="error">{{ form.addRole.errors }}</span>
+
+            <div class="pure-g">
+                <div class="pure-u-1 pure-u-md-1-2">
+                    <div class="rating-input">
+                        <label for="addStartDate">Start Date:</label>
+                        <input type="date" name="addStartDate" required id ="project-addStartDate">
+                        <span class="error">{{ form.addStartDate.errors }}</span>
+                    </div>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-2">
+                    <div class="rating-input">
+                        <label for="addEndDate">End Date:</label>
+                        <input type="date" name="addEndDate" required id="project-addEndDate">
+                        <span class="error">{{ form.addEndDate.errors }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <label for="addLocation">Location:</label>
+            <input type="text" name="addLocation" required id="project-addLocation">
+            <span class="error">{{ form.addLocation.errors }}</span>
+
+            <label for="addDescription">
+                Description:
+            </label>
+            <textarea name="addDescription" required id="project-addDescription"></textarea>
+            <span class="error">{{ form.addDescription.errors }}</span>
+
+            <button type="submit" name="project_add_submit">Submit</button>
+            <button type="button" id="project-experience-cancel" onclick="cancelEditProjectExperience()">Cancel</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

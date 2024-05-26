@@ -1,0 +1,95 @@
+{% extends "jobhub/base_user_profile.html" %}
+{% block content %}
+<div id="education_list">
+<h2 class="content-subhead-right">Education</h2>
+{% for education in educations %}
+    <div class="card" id="education-{{ education.id }}">
+        <h3><span id="education-{{ education.id }}-school">{{ education.school }}</span> 
+            <i class="edit-icon" id="education-edit-{{ education.id }}" 
+            onclick="editEducation('{{ education.id }}')"
+            {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+            >✎</i>
+            <i class="delete-icon" id="education-{{ education.id }}-deleteButton" title="Delete User ID"
+                onclick="deleteCard('education', '{{ education.id }}')"
+            >☓</i>
+        </h3>
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-2">
+                Major: <span id="education-{{ education.id }}-major">{{ education.major }}</span><br>
+                Duration: <span id="education-{{ education.id }}-start">{{ education.start_time }}</span> - 
+                <span id="education-{{ education.id }}-end">{{ education.end_time|default:"Present" }}</span>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                Location: <span id="education-{{ education.id }}-location">{{ education.location }}</span><br>
+                GPA: <span id="education-{{ education.id }}-gpa">{{ education.gpa }}</span>
+            </div>
+        </div>
+        <p id="education-{{ education.id }}-description">{{ education.description }}</p>
+    </div>
+{% endfor %}
+{% if educations|length == 0 %}
+<p class="content-p-right">No education yet</p>
+{% endif %}
+
+
+<div class="card add-card" id="education-add" onclick="editEducation(-1)"
+{% if user.id != profile.user.id %} style="display: none;" {% endif %}
+>
+    <span>+ Add Your Education</span>
+</div>
+
+    <div class="card form-card" id="education-add-form" style="display: none;">
+    <form action=" {% url 'base_user_profile' %} " method="post">
+        {% csrf_token %}
+    <h3>Add Education</h3>
+        <!-- create a hidden label and input with education id -->
+        <label for="addId" hidden>Id:</label>
+        <input type="text" name="addId" id="education_id" hidden>
+
+        <label for="addSchool">School:</label>
+        <input type="text" name="addSchool" required id="education-addSchool">
+        <span class="error">{{ form.addSchool.errors }}</span>
+
+        <label for="addMajor">Major:</label>
+        <input type="text" name="addMajor" required id="education-addMajor">
+        <span class="error">{{ form.addMajor.errors }}</span>
+
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-2">
+                <div class="rating-input">
+                    <label for="addStartDate">Start Date:</label>
+                    <input type="date" name="addStartDate" required id="education-addStartDate">
+                    <span class="error">{{ form.addStartDate.errors }}</span>
+                </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <div class="rating-input">
+                    <label for="addEndDate">End Date:</label>
+                    <input type="date" name="addEndDate" required id="education-addEndDate">
+                    <span class="error">{{ form.addEndDate.errors }}</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <label for="addGPA">GPA:</label>
+        <input type="text" name="addGPA" required id="education-addGPA">
+        <span class="error">{{ form.addGPA.errors }}</span>
+
+        <label for="addLocation">Location:</label>
+        <input type="text" name="addLocation" required id="education-addLocation">
+        <span class="error">{{ form.addLocation.errors }}</span>
+
+        <label for="addDescription">Description:</label>
+        <textarea name="addDescription"
+            required id="education-addDescription">
+        </textarea>
+        <span class="error">{{ form.addDescription.errors }}</span>
+
+        <button type="submit" name="education_add_submit">Submit</button>
+        <button type="button" id="education-cancel" onclick="cancelEditEducation()">Cancel</button>
+    </form>
+
+    </div>
+</div>
+{% endblock %}

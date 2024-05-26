@@ -1,0 +1,30 @@
+{% extends "jobhub/base_user_profile.html" %}
+{% block content %}
+<div class="card" id="skills" {% if form_type == "skills" %} style="display: none;" {%
+    else %} style="display: block;" {% endif %}>
+    <h3>Skills & Interests<i class="edit-icon" id="skills-edit"
+        {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+        >✎</i></h3>
+    <p>Skills: {{ profile.other_info.skills }}</p>
+    <p>Interests: {{ profile.other_info.interests }}</p>
+</div>
+<form action=" {% url 'base_user_profile' %} " method="post">
+    {% csrf_token %}
+    <div class="card form-card" id="skills-form" {% if form_type != "skills" %} style="display: none;" {% else %}
+        style="display: block;" {% endif %}>
+        <h3>Edit Skills & Interests</h3>
+
+        <label for="editSkills">Skills:</label>
+
+        <textarea name="editSkills" required>{{ profile.other_info.skills }}</textarea>
+        <span class="errorlist"> {{ form.editSkills.errors }} </span>
+
+        <label for="editInterests">Interests:</label>
+        <textarea name="editInterests" required>{{ profile.other_info.interests }}</textarea>
+        <span class="errorlist"> {{ form.editInterests.errors }} </span>
+
+        <button type="submit" name="skills_submit">Submit</button>
+        <button type="button" id="skills-cancel">Cancel</button>
+    </div>
+</form>
+{% endblock %}

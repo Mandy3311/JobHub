@@ -1,0 +1,47 @@
+{% extends "jobhub/base_company_profile.html" %}
+{% block content %}
+<div class="card" id="company-contact-info"
+{% if form_type != 'company_contact_info' %} style= "display: block;"{% else %}
+style="display: none;" {% endif %}>
+    <h3>Contact Information <i class="edit-icon" id="company-contact-info-edit"
+        {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+        >✎</i></h3>
+    <p>Phone: {{ profile.company_contact_info.phone }}</p>
+    <p>Email: {{ profile.company_contact_info.email }}</p>
+    <p>Address: {{ profile.company_contact_info.address }}</p>
+    <p>Website: <a href=" {{ profile.company_contact_info.website }}"> {{ profile.company_info.name }}'s Website</a></p>
+    <p>LinkedIn: <a href=" https://www.linkedin.com/{{ profile.company_contact_info.linkedin }}"> {{ profile.company_info.name }}'s LinkedIn</a></p>
+</div>
+<div class="card form-card" id="company-contact-info-form"     
+{% if form_type != 'company_contact_info' %} style="display: none;" {% else %}
+style="display: block;" {% endif %}> 
+    <form action=" {% url 'base_company_profile' %} " method="post">
+        {% csrf_token %}
+    <h3>Edit Contact Information</h3>
+
+    <label for="editPhone">Phone:</label>
+    <input type="text" name="editPhone" required value="{{ profile.company_contact_info.phone }}">
+    <span class="error">{{ form.editPhone.errors }}</span>
+
+    <label for="editEmail">Email:</label>
+    <input type="text" name="editEmail" required value="{{ profile.company_contact_info.email }}">
+    <span class="error">{{ form.editEmail.errors }}</span>
+
+    <label for="editAddress">Address:</label>
+    <input type="text" name="editAddress" required value="{{ profile.company_contact_info.address }}">
+    <span class="error">{{ form.editAddress.errors }}</span>
+
+    <label for="editWebsite">Website:</label>
+    <input type="text" name="editWebsite" required value="{{ profile.company_contact_info.website }}">
+    <span class="error">{{ form.editWebsite.errors }}</span>
+
+    <label for="editLinkedIn">LinkedIn:</label>
+    <span>https://www.linkedin.com/{company/xx}:</span>
+    <input type="text" name="editLinkedIn" required value="{{ profile.company_contact_info.linkedin }}" placeholder="company/username">
+    <span class="error">{{ form.editLinkedIn.errors }}</span>
+
+    <button type="submit" name = "company_contact_info_submit" >Submit</button>
+    <button type="button" id="company-contact-info-cancel">Cancel</button>
+    </form>
+</div>
+{% endblock %}

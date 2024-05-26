@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %} JobHub {% endblock %} </title>
+    {% load static %}
+        <link rel="stylesheet" href="{% static 'jobhub/pure-min.css' %}">
+        <link rel="stylesheet" href="{% static 'jobhub/style.css' %}">
+        <link rel="stylesheet" href="{% static 'jobhub/grids-responsive-min.css' %}">
+    {% block additional_static %}
+    {% endblock %}
+</head>
+<body>
+
+<div id="layout" class="content flex-container">
+
+    <div id="nav" class="pure-u">
+        <div class="nav-inner">
+                {% block menu %}
+                {% endblock %}
+        </div>
+    </div>
+
+    <div id="list" class="pure-u-1">
+        {% block list %}
+        {% endblock %}
+    </div>
+
+    <div id="main" class="pure-u-1">
+        <div class="email-content">
+            {% block job_main %}
+            {% endblock %}
+        </div>
+    </div>
+
+
+
+</div>
+{% block filter %}
+{% endblock %} 
+{% block tools%}
+{% endblock %}
+{% block popup %}
+{% endblock %}
+</body>
+</html>

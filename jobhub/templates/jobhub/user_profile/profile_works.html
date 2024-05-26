@@ -1,0 +1,89 @@
+{% extends "jobhub/base_user_profile.html" %}
+{% block content %}
+<div id="work-experience-list">
+    <h2 class="content-subhead-right">Work Experience</h2>
+    {% for experience in works %}
+        <div class="card" id="work-experience-{{ experience.id }}">
+            <h3><span id="work-experience-{{ experience.id }}-company">{{ experience.company }}</span>
+                <i class="edit-icon work-experience-edit" data-id="{{ experience.id }}" 
+                onclick="editWorkExperience('{{ experience.id }}')"
+                {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+                >✎</i>
+                <i class="delete-icon" id="work-experience-{{ experience.id }}-deleteButton" title="Delete User ID"
+                    onclick="deleteCard('work-experience', '{{ experience.id }}')"
+                >☓</i>
+            </h3>
+            <div class="pure-g">
+                <div class="pure-u-1 pure-u-md-1-2">
+                    Role: <span id="work-experience-{{ experience.id }}-role">{{ experience.role }}</span><br>
+                    Duration: <span id="work-experience-{{ experience.id }}-start">{{ experience.start_time }}</span> - 
+                    <span id="work-experience-{{ experience.id }}-end">{{ experience.end_time|default:"Present" }}</span>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-2">
+                    Type: <span id="work-experience-{{ experience.id }}-type">{{ experience.type }}</span><br>
+                    Location: <span id="work-experience-{{ experience.id }}-location">{{ experience.location }}</span>
+                </div>
+                <p id="work-experience-{{ experience.id }}-description">{{ experience.description }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    {% if works|length == 0 %}
+    <p class="content-p-right">No work experience yet</p>
+    {% endif %}
+
+    <div class="card add-card" id="work-experience-add" onclick="editWorkExperience(-1)"
+    {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+    >
+        <span>+ Add Your Work Experience</span>
+    </div>
+    <div class="card form-card" id="work-experience-form" style="display: none;">
+        <form action=" {% url 'base_user_profile' %} " method="post">
+            {% csrf_token %}
+        <h3>Edit Work Experience</h3>
+        <label for="addId" hidden>Id:</label>
+        <input type="text" name="addId" id="work_id" hidden value="-1">
+
+        <label for="addCompany">Company:</label>
+        <input type="text" name="addCompany" required id="work-addCompany">
+        <span class="error">{{ form.addCompany.errors }}</span>
+    
+        <label for="addRole">Role:</label>
+        <input type="text" name="addRole" required id="work-addRole">
+        <span class="error">{{ form.addRole.errors }}</span>
+    
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-2">
+                <div class="rating-input">
+                    <label for="addStartDate">Start Date:</label>
+                    <input type="date" name="addStartDate" required id="work-addStartDate">
+                    <span class="error">{{ form.addStartDate.errors }}</span>
+                </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <div class="rating-input">
+                    <label for="addEndDate">End Date:</label>
+                    <input type="date" name="addEndDate" required id="work-addEndDate">
+                    <span class="error">{{ form.addEndDate.errors }}</span>
+                </div>
+            </div>
+        </div>
+    
+        <label for="addType">Type:</label>
+        <input type="text" name="addType" required id="work-addType">
+        <span class="error">{{ form.addType.errors }}</span>
+    
+        <label for="addLocation">Location:</label>
+        <input type="text" name="addLocation" required id="work-addLocation">
+        <span class="error">{{ form.addLocation.errors }}</span>
+    
+        <label for="addWDescription">Description:</label>
+        <textarea name="addDescription" required id="work-addDescription"></textarea>
+        <span class="error">{{ form.addDescription.errors }}</span>
+    
+        <button type="submit" name="work_experience_add_submit">Submit</button>
+        <button type="button" id="work-experience-cancel" onclick="cancelEditWorkExperience()">Cancel</button>
+    </form>
+    </div>
+</div>
+
+{% endblock %}

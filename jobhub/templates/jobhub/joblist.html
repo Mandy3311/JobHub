@@ -1,0 +1,90 @@
+{% extends "jobhub/base_joblist.html" %}
+
+{% block title %} Job List {% endblock %} 
+
+{% load static %}
+{% block additional_static %}
+    <link rel="stylesheet" href="{% static 'jobhub/joblist_style.css' %}">
+    <script src="{% static 'jobhub/joblist.js' %}"></script>
+    <script src="{% static 'jobhub/jquery-3.7.1.js' %}"></script>
+{% endblock %}
+
+{% block menu %}
+    <img width="100" height="100" alt="Tilo Mitra&#x27;s avatar" class="jobhub-avatar" src="/static/jobhub/jobhub.jpg">
+    <p style="color: #777;"> {{ request.user.last_name }} account</p>
+    <div class="pure-menu">
+        <ul class="pure-menu-list">
+            <li><a href="{% url 'base_company_profile' %}" class="pure-menu-link">My Profile</a></li>
+            <li><a href="{% url 'joblist' %}" class="pure-menu-link">Jobs</a></li>
+            <li>
+                {% if request.user.last_name == 'employer' %}
+                    <a href="{% url 'employer_application' 0 'all' %}" class="pure-menu-link">Applications</a>
+                {% else %}
+                    <a href="{% url 'applicant_application' 'all' %}" class="pure-menu-link">Applications</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    <a href="{% url 'logout' %}" class="pure-menu-link logout-btn">Logout</a>
+{% endblock %}
+
+{% block filter %}
+    <div class="filter-bar">
+        <form id="search-form">
+            <div class="search-box">
+                <input id="search-input" name="search" type="text" placeholder="🔍Search" />
+            </div>
+        </form>
+        <div class="toggle-button" id="filter-24-hours">
+            Past 24 Hours
+        </div>
+        <div class="toggle-button" id="filter-week">
+            Past Week
+        </div>
+        <div class="toggle-button" id="filter-month">
+            Past Month
+        </div>
+        <div class="toggle-button" id="filter-full-time">
+            Full-time job
+        </div>
+        <div class="toggle-button" id="filter-part-time">
+            Part-time job
+        </div>
+        <div class="toggle-button" id="filter-internship">
+            Internship
+        </div>
+    </div>
+{% endblock %}
+
+{% block list %}
+
+{% endblock %}
+
+{% block job_main %}
+
+{% endblock %}
+
+{% block tools%}
+    <div class="tools-bar" id="tools-bar">
+        <!-- <button class="pure-button" id="save-button"><b>SAVE</b></button> -->
+        <button class="pure-button pure-button-primary" id="apply-button" >APPLY</button>
+    </div>
+{% endblock %}
+
+
+{% block popup %}
+<div id="myModal" class="modal">
+
+        
+    <div class="card form-card modal-content" id="submit-window"> 
+        <div id="submit-message">
+            <h3>Application Submitted.<br> 
+                Good luck!</h3>
+        </div>
+
+        <button type="button" id="submit-application-cancel">Close</button>
+    </div>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %} JobHub {% endblock %} </title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'jobhub/pure-min.css' %}">
+    <link rel="stylesheet" href="{% static 'jobhub/profile_style.css' %}">
+    <link rel="stylesheet" href="{% static 'jobhub/grids-responsive-min.css' %}">
+    <!-- from static import profile.js -->
+    <script src="{% static 'jobhub/profile.js' %}"></script>
+</head>
+
+<body data-form-type="{{ form_type }}">
+    {% block content %}
+    <div id="layout">
+        
+        <div id="menu">
+            <div id="nav">
+                <div class="nav-inner">
+                    <img width="100" height="100" alt="Tilo Mitra&#x27;s avatar" class="jobhub-avatar" src="/static/jobhub/jobhub.jpg">
+                    <p> {{ user.last_name }} account</p>
+                    <div class="pure-menu">
+                        <ul class="pure-menu-list">
+                            <li><a href="{% url 'base_company_profile' %}" class="pure-menu-link">My Profile</a></li>
+                            <li><a href="{% url 'joblist' %}" class="pure-menu-link">Jobs</a></li>
+                            {% if user.last_name == 'employer' %}
+                                <li><a href="{% url 'employer_application' 0 'all' %}" class="pure-menu-link">Applications</a></li>
+                            {% else %}
+                                <li><a href="{% url 'applicant_application' 'all' %}" class="pure-menu-link">Applications</a></li>
+                            {% endif %}                        
+                        </ul>
+                    </div>
+                    <a href="{% url 'logout' %}" class="pure-menu-link logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="main">
+            <div class="header">
+                <h1>{{ profile.company_info.name }} </h1>
+                <h2>
+                    Employer Username: <span id="userId">{{ profile.user.username }}</span>
+                    <i class="copy-icon" id="copyButton" title="Copy User ID" onclick="copyUserId()"> ✂ </i>
+                </h2>
+            </div>
+
+            <div class="content">
+                <div class="pure-g">
+                    <!-- left part -->
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <!-- basic info card -->
+                        {% include "jobhub/company_profile/profile_company_info.html" %}
+
+                        <!-- contact info card -->
+                        {% include "jobhub/company_profile/profile_company_contact_info.html" %}
+
+                        <!-- jobs card -->
+                        <div class="card">
+                            <h3>Jobs Opening</h3>
+                            {% for job in jobs %}
+                            <p><a href="/joblist/?id={{job.id}}">{{ job.name }}</a>
+                                <span class="job-location">{{ job.summary.location }}</span>
+                            </p>
+                            {% endfor %}
+                            {% if jobs|length == 0 %}
+                            <p>No jobs opening</p>
+                            {% endif %}
+                            <a class="pure-button" 
+                                href="/joblist/?company_id={{profile.id}}">See All ></a> 
+                        </div>
+
+                        <!-- staff card -->
+                        {% include "jobhub/company_profile/profile_staff_list.html" %}
+                    </div>
+
+                    <!-- right part -->
+                    <div class="pure-u-1 pure-u-md-2-3">
+                        <!-- Review Section -->
+                        <h2 class="content-subhead-right">Company Reviews</h2>
+
+                        <!-- Overall Rating Card -->
+                        {% include "jobhub/company_profile/profile_overall_rating.html" %}
+
+                        <!-- Individual Review Cards -->
+                        <h2 class="content-subhead-right">Individual Interview Reviews (2)</h2>
+
+                        <div class="card">
+                            <div class="filter-container">
+                                <!-- Job Title Filter -->
+                                <div class="filter-item">
+                                    <label for="job-title">Job Title:</label>
+                                    <!-- when select, call this func filterIndividualReviews -->
+                                    <select id="job-title" onchange="filterIndividualReviews()">
+                                        <option selected value="all">All</option>
+                                        <option value="IT Intern">IT Intern</option>
+                                        <option value="Software Engineer">Software Engineer</option>
+                                        <option value="Product Manager">Product Manager</option>
+                                        <option value="Product Designer">Machine Learning Engineer</option>
+                                        <option value="Data Scientist">Data Scientist</option>
+                                        <option value="Data Analyst">Data Analyst</option>
+                                        <option value="UX Designer">UI/UX Designer</option>
+                                        <option value="Business Analyst">Business Analyst</option>
+                                        <option value="Marketing">Marketing & Finance</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                        
+                                <!-- Ratings Filter -->
+                                <div class="filter-item">
+                                    <label for="rating">Rating:</label>
+                                    <select id="rating"  onchange="filterIndividualReviews()">
+                                        <option value="1">1 Star</option>
+                                        <option value="2">2 Stars</option>
+                                        <option value="3">3 Stars</option>
+                                        <option value="4">4 Stars</option>
+                                        <option value="5">5 Stars</option>
+                                        <option selected value="all" selected>All</option>
+                                    </select>
+                                </div>
+                        
+                                <!-- Time Filter -->
+                                <div class="filter-item">
+                                    <label for="time-frame">Time Frame:</label>
+                                    <select id="time-frame"  onchange="filterIndividualReviews()">
+                                        <option value="1-month">Recent 1 Month</option>
+                                        <option value="6-months">Recent 6 Months</option>
+                                        <option value="1-year">1 Year</option>
+                                        <option value="3-years">3 Years</option>
+                                        <option selected value="all">All</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add Review Button -->
+                        {% include "jobhub/company_profile/profile_company_reviews.html" %}
+                    </div>
+
+                    <h2 class="content-subhead">About JobHub</h2>
+                    <p>
+                        Welcome to our job application platform, where applicants and employers seamlessly connect. Our user-friendly site simplifies your job search and hiring process, ensuring a smooth journey for all. Discover your next opportunity or talent here with us!                    </p>
+
+                    <div class="pure-g">
+                        <div class="pure-u-1-4">
+                            <img class="pure-img-responsive"
+                                src="http://farm3.staticflickr.com/2875/9069037713_1752f5daeb.jpg" alt="Peyto Lake">
+                        </div>
+                        <div class="pure-u-1-4">
+                            <img class="pure-img-responsive"
+                                src="http://farm3.staticflickr.com/2813/9069585985_80da8db54f.jpg" alt="Train">
+                        </div>
+                        <div class="pure-u-1-4">
+                            <img class="pure-img-responsive"
+                                src="http://farm6.staticflickr.com/5456/9121446012_c1640e42d0.jpg" alt="T-Shirt Store">
+                        </div>
+                        <div class="pure-u-1-4">
+                            <img class="pure-img-responsive"
+                                src="http://farm8.staticflickr.com/7357/9086701425_fda3024927.jpg" alt="Mountain">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</body>
+
+</html>

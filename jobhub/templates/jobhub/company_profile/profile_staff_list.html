@@ -1,0 +1,45 @@
+{% extends "jobhub/base_company_profile.html" %}
+{% block content %}
+
+<div class="card" id="staff-list"
+{% if form_type != 'company_staff_list' %} style= "display: block;"{% else %}
+style="display: none;" {% endif %}
+    >
+    <h3>Public Staff Lists <i class="edit-icon" id="staff-list-edit"
+        {% if user.id != profile.user.id %} style="display: none;" {% endif %}
+        >✎</i></h3>
+    <!-- hyper link to staff's profile -->
+    {% for staff in staff_list %}
+    <p id="staff-{{staff.user.id}}"> {{ staff.personal_info.position }}: 
+        <a href="/other_user_profile/?applicant_id={{ staff.user.id }}">{{ staff.personal_info.name }}</a> 
+    </p>
+    {% endfor %}
+    {% if staff_list|length == 0 %}
+    <p>No staff</p>
+    {% endif %}
+</div>
+<div class="card form-card" id="staff-list-form"
+{% if form_type != 'company_staff_list' %} style="display: none;" {% else %}
+style="display: block;" {% endif %}
+> 
+<form action=" {% url 'base_company_profile' %} " method="post">
+    {% csrf_token %}
+    <h3>Edit Staff List</h3>
+
+    {% for staff in staff_list %}
+        <p id="staff-{{staff.user.id}}-add"> {{ staff.personal_info.position }}: {{ staff.personal_info.name }} 
+            <i class="delete-icon" title="Delete User ID" onclick="deleteStaff('{{ staff.user.id }}')">☓</i>
+        </p>
+        <!-- <button type="button" name = "delete_staff_" + {{ staff.user.id }} >Delete</button> -->
+    {% endfor %}
+
+    <label for="addStaff">Add Staff (applicant username):</label>
+    <input type="text" name="addStaff" value="">
+    <span class="error">{{ form.addStaff.errors }}</span>
+
+    <button type="submit" name ="company_staff_list_submit">Submit</button>
+    <button type="button" id="staff-list-cancel">Cancel</button>
+</form>
+</div>
+
+{% endblock %}

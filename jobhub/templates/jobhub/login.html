@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHub</title>
+    <link rel="stylesheet" href="/static/jobhub/login_style.css">
+    <link rel="stylesheet" href="/static/jobhub/application/application.css">
+</head>
+<body>
+    <header class="header-div" id="id_header_div">
+        <h1 class="site-name" id="id_site_name">Job Hub</h1>
+        <a class="navigation-links" href= " {% url 'register' %} " id="id_register_link">Register</a>
+    </header>
+    <main>
+        <div id="login-box">
+            <form method="post">
+                <div class="container">
+                    <h1 id="id_page_name">Login</h1>
+                    {% if form.non_field_errors %}
+                        <div class="errorlist">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    <label for="id_username"><b>Username:</b></label>
+                    <input type="text" placeholder="Enter Username" name="username" id="id_username" required>
+                    <span class="errorlist"> {{ form.username.errors }} </span>
+
+                    <label for="id_password"><b>Password:</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" id="id_password" required>
+                    <span class="errorlist"> {{ form.username.errors }} </span>
+                <button type="submit" class="registerbtn" id="id_login_button">Login</button>
+                {% csrf_token %}
+            </form>
+        </div>
+    </main>
+</body>
+</html>

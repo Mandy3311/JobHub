@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %} JobHub {% endblock %} </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'jobhub/application/application.css' %}">
+    <link rel="stylesheet" href="{% static 'jobhub/application/pure_origin.css' %}">
+    <link rel="stylesheet" href="{% static 'jobhub/application/employer_styles.css' %}">
+    <script src="{% static 'jobhub/application/buttons.js' %}?v={% now 'U' %}" type="text/javascript"></script>
+    <script src="{% static 'jobhub/application/get_applicant.js' %}?v={% now 'U' %}" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="layout" class="content pure-g">
+    <div id="nav" class="pure-u">
+        <div class="nav-inner">
+            {% block menu %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <div id="list" class="pure-u-1">
+        {% block application %}
+        {% endblock %}
+    </div>
+
+    <div id="main" class="pure-u-1">
+        <div class="email-content pure-u-1">
+            <div class="email-content-header">
+                {% block main-header %}
+                {% endblock %}
+            </div>
+            <div class="email-content-body pure-g">
+                {% block main-content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button-1">&times;</span>
+        <p id="confirmModalText"></p>
+        <div class="modal-buttons">
+            <button class="confirm-button">Confirm</button>
+            <button class="close-button-2">Cancel</button>
+        </div>
+    </div>
+</div>
+<div id="profileModal" class="modal">
+    <div class="profilemodal-content">
+        <span class="close-button-1">&times;</span>
+        <iframe id="profileIframe" src="" style="width: 100%; height: 80vh; border: none;"></iframe>
+        <div class="modal-buttons">
+            <button class="confirm-button">Reviewed</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

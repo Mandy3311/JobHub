@@ -1,0 +1,214 @@
+{% extends "jobhub/base_company_profile.html" %}
+{% block content %}
+
+<div class="card add-card" id="addReviewButton"
+{% if user.last_name == "applicant" and form_type != 'add_review'%} style="display: block;" {% else %}
+style="display: none;" {% endif %}>
+    <span>+ Add Your Review</span>
+</div>
+<div class="card form-card" id="addReviewForm" {% if user.last_name == "applicant" and form_type == 'add_review'%} style="display: block;" {% else %}
+style="display: none;" {% endif %}> 
+    <h3>Add Your Review</h3>
+    <form action=" {% url 'other_company_profile' %} " method="post">
+        {% csrf_token %}
+    <!-- a hidden field to store the company id -->
+    <label for="addId" hidden>Id:</label>
+    <input type="text" name="addId" id="company_id" hidden value="{{ profile.user.id }}">
+
+    <label for="addRole">Role:</label>
+    <select name="addRole" required>
+        <option selected value="IT Intern">IT Intern</option>
+        <option value="Software Engineer">Software Engineer</option>
+        <option value="Product Manager">Product Manager</option>
+        <option value="Product Designer">Machine Learning Engineer</option>
+        <option value="Data Scientist">Data Scientist</option>
+        <option value="Data Analyst">Data Analyst</option>
+        <option value="UX Designer">UI/UX Designer</option>
+        <option value="Business Analyst">Business Analyst</option>
+        <option value="Marketing">Marketing & Finance</option>
+        <option value="Other">Other</option>
+    </select>
+    <span class="error">{{ form.addRole.errors }}</span>
+
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-1-3">
+            <div class="rating-input">
+            <label for="addOverallRating">Overall Rating:</label>
+            <select name="addOverallRating" required>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option selected value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+            </select>
+            </div>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-3">
+            <div class="rating-input">
+            <label for="addInterviewProgressRating">Interview Progression:</label>
+            <select name="addInterviewProgressRating" required>
+                <option value="1">1 Star</option>
+                <option selected value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+            </select>
+            </div>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-3">
+            <div class="rating-input">
+            <label for="addResponseTimeRating">App Response Time:</label>
+            <select name="addResponseTimeRating" required>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option selected value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+            </select>
+            </div>
+        </div>                            
+    </div>
+    <span class="error">{{ form.addOverallRating.errors }}</span><br>
+    <span class="error">{{ form.addInterviewProgressRating.errors }}</span>
+    <span class="error">{{ form.addResponseTimeRating.errors }}</span>
+
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-1-3">
+            <div class="rating-input">
+            <label for="addBenefitRating">Benefits in Interview:</label>
+            <select name="addBenefitRating" required>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option selected value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+            </select>
+            </div>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-3">
+            <div class="rating-input">
+            <label for="addAtmosphereRating"> Interview Atmosphere:</label>
+            <select name="addAtmosphereRating" required>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option selected value="5">5 Stars</option>
+            </select>
+            </div>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-3">
+            <div class="rating-input">
+            <label for="addEtiquetteRating">Interviewer Etiquette:</label>
+            <select name="addEtiquetteRating" required>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option selected value="5">5 Stars</option>
+            </select>
+            </div>
+        </div>
+    </div>
+    <span class="error">{{ form.addBenefitRating.errors }}</span><br>
+    <span class="error">{{ form.addAtmosphereRating.errors }}</span>
+    <span class="error">{{ form.addEtiquetteRating.errors }}</span>
+    
+    <!-- Add other fields similarly -->
+
+    <label for="addTitle">Title:</label>
+    <input type="text" name="addTitle" required value = "Pays well, too much process and pressure">
+    <span class="error">{{ form.addTitle.errors }}</span>
+
+    <label for="addContent">Content:</label>
+    <textarea name="addContent" required>This is the content of the specific review. It was insightful and helpful. Loved it!</textarea>
+    <span class="error">{{ form.addContent.errors }}</span>
+
+    <button name="submit_individual_review">Submit</button>
+    <button type="button" id="cancelButton">Cancel</button>
+    </form>
+</div>
+
+<!-- Review Cards -->
+{% for review in individual_reviews %}
+<div class="card individual-review" data-job-title="{{ review.role }}" data-rating="{{ review.overall_rating }}"
+ data-date="{{ review.time_posted|date:'F d, Y' }}" id="review-{{ review.id }}">
+    <h3>{{ review.title }}
+        {% if user.id == review.user.id %}
+        <i class="delete-icon" title="Delete Review" onclick="deleteReview('{{ review.id }}', '{{ profile.user.id }}')">☓</i>
+        {% endif %}
+    </h3>
+    <div class="review-info">
+        <div>
+            <span>By <a href="/other_user_profile/?applicant_id={{ review.user.id }}"> {{ review.user.first_name }} </a> - </span>
+            <span> {{ review.role }} - </span>
+            <span style="font-style: italic;"> {{ review.time_posted|date:"F d, Y" }} </span>
+        </div>
+        {% if review.overall_rating < 1 %}
+        <span>☆☆☆☆☆</span>
+        {% elif review.overall_rating < 2 %}
+        <span>★☆☆☆☆</span>
+        {% elif review.overall_rating < 3 %}
+        <span>★★☆☆☆</span>
+        {% elif review.overall_rating < 4 %}
+        <span>★★★☆☆</span>
+        {% elif review.overall_rating < 5 %}
+        <span>★★★★☆</span>
+        {% else %}
+        <span>★★★★★</span>
+        {% endif %}
+    </div>
+
+    <div class="label-container">
+        {% if review.interview_progression_rating < 3 %}
+        <span class="label red-label">
+        {% elif review.interview_progression_rating < 4 %}
+        <span class="label blue-label">
+        {% else %}
+        <span class="label green-label">
+        {% endif %}
+            Interview Progression: {{ review.interview_progression_rating }}</span>
+       
+            {% if review.application_response_time_rating < 3 %}
+        <span class="label red-label">
+        {% elif review.application_response_time_rating < 4 %}
+        <span class="label blue-label">
+        {% else %}
+        <span class="label green-label">
+        {% endif %}
+            Application Response Time: {{ review.application_response_time_rating }}</span>
+        
+        {% if review.benefits_during_interview_rating < 3 %}
+        <span class="label red-label">
+        {% elif review.benefits_during_interview_rating < 4 %}
+        <span class="label blue-label">
+        {% else %}
+        <span class="label green-label">
+        {% endif %}
+            Benefits During Interview: {{ review.benefits_during_interview_rating }}</span>
+        
+        {% if review.interview_atmosphere_rating < 3 %}
+        <span class="label red-label">
+        {% elif review.interview_atmosphere_rating < 4 %}
+        <span class="label blue-label">
+        {% else %}
+        <span class="label green-label">
+        {% endif %}
+            Interview Atmosphere: {{ review.interview_atmosphere_rating }}</span>
+        
+        {% if review.interview_etiquette_rating < 3 %}
+        <span class="label red-label">
+        {% elif review.interview_etiquette_rating < 4 %}
+        <span class="label blue-label">
+        {% else %}
+        <span class="label green-label">
+        {% endif %}    
+        Interviewer Etiquette: {{ review.interview_etiquette_rating }}</span>
+    </div>
+    <p>{{ review.review }}</p>
+</div>
+
+{% endfor %}
+
+
+{% endblock %}
